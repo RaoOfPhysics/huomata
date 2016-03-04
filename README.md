@@ -29,4 +29,9 @@ However, launching a browser tab every time you want to read and annotate a PDF 
 
 ## How to participate
 
-[Coming soon!]
+To get started:
+```
+npm install
+```
+
+To start the app: `npm run start`
