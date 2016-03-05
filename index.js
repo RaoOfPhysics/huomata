@@ -2,24 +2,30 @@ import { PDFJS } from 'pdfjs-dist';
 import fs from 'fs';
 
 var data = new Uint8Array(fs.readFileSync('helloworld.pdf'));
+
+
+var container = document.getElementById('viewerContainer');
+
+// (Optionally) enable hyperlinks within PDF files.
+//pdfLinkService = new PDFLinkService();
+
+console.log("viewer", PDFViewer);
+pdfViewer = new PDFJS.PDFViewer({
+  container: container,
+  //linkService: pdfLinkService,
+});
+//pdfLinkService.setViewer(pdfViewer);
+
+container.addEventListener('pagesinit', function () {
+  // We can use pdfViewer now, e.g. let's change default scale.
+  pdfViewer.currentScaleValue = 'page-width';
+});
+
+// Loading document.
 PDFJS.getDocument(data).then(function (pdfDocument) {
-  console.log('Number of pages: ' + pdfDocument.numPages);
+  // Document loaded, specifying document for the viewer and
+  // the (optional) linkService.
+  pdfViewer.setDocument(pdfDocument);
 
-  pdfDocument.getPage(1).then(function (page) {
-    var scale = 1.5;
-    var viewport = page.getViewport(scale);
-    
-    // Prepare canvas using PDF page dimensions.
-    var canvas = document.getElementById('the-canvas');
-    var context = canvas.getContext('2d');
-    canvas.height = viewport.height;
-    canvas.width = viewport.width;
-
-    // Render PDF page into canvas context.
-    var renderContext = {
-      canvasContext: context,
-      viewport: viewport
-    };
-    page.render(renderContext);
-  });
+  //pdfLinkService.setDocument(pdfDocument, null);
 });
